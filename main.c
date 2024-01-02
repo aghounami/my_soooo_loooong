@@ -6,7 +6,7 @@
 /*   By: aghounam <aghounam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 08:21:14 by aghounam          #+#    #+#             */
-/*   Updated: 2024/01/01 15:16:46 by aghounam         ###   ########.fr       */
+/*   Updated: 2024/01/02 12:15:27 by aghounam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,16 +73,16 @@ int	handle_key_event(int keycode, t_vars *image)
 		mlx_destroy_window(image->mlx_ptr, image->win_ptr);
 		exit(0);
 	}
-	else if (keycode == 0 || keycode == 123)
+	else if (keycode == 123)
 		mouvea(image);
-	else if (keycode == 1 || keycode == 125)
+	else if (keycode == 125)
 		mouves(image);
-	else if (keycode == 2 || keycode == 124)
+	else if (keycode == 124)
 		mouved(image);
-	else if (keycode == 13 || keycode == 126)
+	else if (keycode == 126)
 		mouvew(image);
 	mlx_clear_window(image->mlx_ptr, image->win_ptr);
-	randre(image->map, image, image->limn);
+	randre(image->map, image);
 	return 0;
 }
 
@@ -93,9 +93,9 @@ void	window(t_vars *image)
 		exit(1);
 	image->win_ptr = mlx_new_window(image->mlx_ptr, image->width * 48, (image->height) * 48, "My Image");
 	image->img = mlx_new_image(image->mlx_ptr, image->width * 48, image->height * 48);
-	mlx_hook(image->win_ptr, 2, 0, &handle_key_event, image);
 	mlx_hook(image->win_ptr, 17, 0, &closegame, image);
-	randre(image->map, image, image->limn);
+	mlx_hook(image->win_ptr, 2, 0, &handle_key_event, image);
+	randre(image->map, image);
 	mlx_loop(image->mlx_ptr);
 }
 
@@ -106,27 +106,23 @@ void	window(t_vars *image)
 int main(int argc, char **arv)
 {
 	// atexit(leaks);
-	int		i;
-	t_vars	image;
-	char	*sr;
+	t_vars	*image;
+	char	*src;
 	char	**str;
-
-	if (argc != 2)
-		return (0);
-	if (test_v1(arv[1]) == 0)
-		exit_map(&image);
-	init_var(&image);
-	checkmap(arv[1], &image);
-	sr = update(arv[1]);
-	str = ft_split(sr, '\n');
+	
+	image = malloc(sizeof(t_vars));
+	if (test_v1(arv[1]) == 0 || argc != 2 || !image)
+		exit_map(image);
+	init_var(image);
+	checkmap(arv[1], image);
+	src = update(arv[1]);
+	str = ft_split(src, '\n');
 	if(!str)
 		exit(1);
-	image.map = str;
-	image.width = fstrlen(image.map[0]);
-	i = 0;
-	while (image.map[i])
-		i++;
-	image.height = i;
-	window(&image);
+	image->map = str;
+	image->width = fstrlen(image->map[0]);
+	while (image->map[image->height])
+		image->height++;
+	window(image);
 	return 0;
 }

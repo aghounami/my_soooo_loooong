@@ -36,6 +36,7 @@ void	mouvea(t_vars *image)
 	else if(image->map[image->x_p][image->y_p - 1] == 'E' && image->c == 0)
 	{
 		image->count++;
+		
 		mlx_clear_window(image->mlx_ptr, image->win_ptr);
 		exit(0);
 	}
@@ -95,3 +96,24 @@ void	mouved(t_vars *image)
 		exit(0);
 	}
 }
+
+// int	handle_key_event(int keycode, t_vars *image)
+// {
+// 	position(image->map, image);
+// 	if (keycode == 53)
+// 	{
+// 		mlx_destroy_window(image->mlx_ptr, image->win_ptr);
+// 		exit(0);
+// 	}
+// 	else if (keycode == 123)
+// 		mouvea(image);
+// 	else if (keycode == 125)
+// 		mouves(image);
+// 	else if (keycode == 124)
+// 		mouved(image);
+// 	else if (keycode == 126)
+// 		mouvew(image);
+// 	mlx_clear_window(image->mlx_ptr, image->win_ptr);
+// 	randre(image->map, image, image->limn);
+// 	return 0;
+// }

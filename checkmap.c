@@ -6,7 +6,7 @@
 /*   By: aghounam <aghounam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 08:21:31 by aghounam          #+#    #+#             */
-/*   Updated: 2023/12/31 17:38:04 by aghounam         ###   ########.fr       */
+/*   Updated: 2024/01/02 12:16:48 by aghounam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,16 +70,15 @@ void checkpos(char **rest, t_vars *size)
 		while (rest[x][y])
 		{
 			if (rest[x][y] == 'P')
-			{
-				size->x_p = x;
-				size->y_p = y;
-			}
+				break ;
 			y++;
 		}
+		if(rest[x][y] == 'P')
+			break ;
 		x++;
 		y = 0;
 	}
-	ifcaneat(rest, size->x_p, size->y_p, &e);
+	ifcaneat(rest, x, y, &e);
 	if (checkc(rest) == 0)
 	{
 		ft_printf("cant eat C\n");
@@ -142,15 +141,14 @@ int maploop(char *p, t_vars *size)
 	return (1);
 }
 
-void	checkmap(char *str, t_vars *size)
+void checkmap(char *str, t_vars *size)
 {
 	char *check;
 	check = arvline(str, size);
 	size->total_lenght = f_strlen(check);
 	size->win_w = ft_len(check);
 	char *res = ft_strtrim(check, "10EPC\n");
-	if ((size->win_w * size->win_h - 1) != size->total_lenght || (res[0] != '\0')
-		|| !validmap(check, size) || !maploop(check, size))
+	if ((size->win_w * size->win_h - 1) != size->total_lenght || (res[0] != '\0') || !validmap(check, size) || !maploop(check, size))
 	{
 		ft_printf("check map\n");
 		free(res);

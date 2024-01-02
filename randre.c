@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mouvement.c                                        :+:      :+:    :+:   */
+/*   randre.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aghounam <aghounam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 08:20:45 by aghounam          #+#    #+#             */
-/*   Updated: 2024/01/01 15:14:13 by aghounam         ###   ########.fr       */
+/*   Updated: 2024/01/02 12:13:01 by aghounam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "solong.h"
 
-char *ft_exit(t_vars *image)
-{
-	if (image->c == 0)
-		return (image->open);
-	else
-		return (image->close);
-}
+// char *ft_exit(t_vars *image)
+// {
+// 	if (image->c == 0)
+// 		return (image->open);
+// 	else
+// 		return (image->close);
+// }
 
 void put_string(t_vars *image)
 {
@@ -41,29 +41,26 @@ void put_string(t_vars *image)
 	free(str);
 	free(j);
 }
-void randre(char **str, t_vars *image, char *player)
+void randre(char **str, t_vars *image)
 {
 	int i;
 	int j;
 
 	i = 0;
-	char *exit = ft_exit(image);
+	// char *exit = ft_exit(image);
 	while (str[i])
 	{
 		j = 0;
 		while (str[i][j])
 		{
 			if (str[i][j] == 'P')
-				putimage(player, image, i, j);
-			else if (str[i][j] == 'C')
+				putimage(image->player, image, i, j);
+			if (str[i][j] == 'C')
 				putimage("./imag/makla.xpm", image, i, j);
-			else if (str[i][j] == '1')
+			if (str[i][j] == '1')
 				putimage("./imag/jidar.xpm", image, i, j);
-			else if (str[i][j] == '0')
-				putimage("./imag/alll.xpm", image, i, j);
-			else
-				putimage(exit, image, i, j);
-			// put_string(image);
+			if (str[i][j] == 'E')
+				putimage(image->close, image, i, j);
 			j++;
 		}
 		i++;
@@ -75,7 +72,9 @@ void putimage(char *str, t_vars *image, int i, int j)
 	image->img = mlx_xpm_file_to_image(image->mlx_ptr, str, &image->height, &image->width);
 	if(!image->img)
 	{
+		ft_printf("check image");
 		mlx_clear_window(image->mlx_ptr, image->win_ptr);
+		mlx_destroy_window(image->mlx_ptr, image->win_ptr);
 		exit(1);
 	}
 	mlx_put_image_to_window(image->mlx_ptr, image->win_ptr, image->img, j * 48, i * 48);

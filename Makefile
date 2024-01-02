@@ -6,7 +6,7 @@
 #    By: aghounam <aghounam@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/29 08:21:10 by aghounam          #+#    #+#              #
-#    Updated: 2023/12/30 16:15:13 by aghounam         ###   ########.fr        #
+#    Updated: 2024/01/02 09:31:45 by aghounam         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ LFLAGS = -lmlx -framework OpenGL -framework AppKit
 SRC = main.c ./utils/get_next_line.c ./utils/get_next_line_utils.c \
 				checkmap.c ./utils/ft_split.c ./utils/ft_strdup.c  \
 				./utils/ft_strtrim.c ./utils/ft_substr.c mouve.c init.c \
-				mouvement.c ./utils/ft_itoa.c
+				randre.c ./utils/ft_itoa.c
 OBJ = $(SRC:.c=.o)
 EXEC = so_long
 PRINT = printf/libftprintf.a

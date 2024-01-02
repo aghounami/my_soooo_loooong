@@ -6,7 +6,7 @@
 /*   By: aghounam <aghounam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 10:09:17 by aghounam          #+#    #+#             */
-/*   Updated: 2023/12/31 17:15:49 by aghounam         ###   ########.fr       */
+/*   Updated: 2024/01/02 11:54:05 by aghounam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	init_var(t_vars *size)
 {
+	size->posx = 0;
+	size->posy = 0;
 	size->map = NULL;
 	size->total_lenght = 0;
 	size->win_h = 0;
@@ -25,16 +27,14 @@ void	init_var(t_vars *size)
 	size->height = 0;
 	size->width = 0;
 	size->count = 0;
-	size->limn = "./imagp/limn.xpm";
-	size->lisr = "./imagp/lisr.xpm";
-	size->lfo9 = "./imagp/lfo9.xpm";
-	size->lte7t = "./imagp/asfal.xpm";
+	size->player = "./imag/player.xpm";
 	size->close = "./imag/close.xpm";
-	size->open = "./imag/open.xpm";
+	// size->open = "./imag/open.xpm";
 }
 
 int closegame(t_vars *image)
 {
+	mlx_clear_window(image->mlx_ptr, image->win_ptr);
 	mlx_destroy_window(image->mlx_ptr, image->win_ptr);
 	exit(1);
 }
