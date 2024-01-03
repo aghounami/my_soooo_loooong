@@ -6,7 +6,7 @@
 /*   By: aghounam <aghounam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 08:21:14 by aghounam          #+#    #+#             */
-/*   Updated: 2024/01/02 12:15:27 by aghounam         ###   ########.fr       */
+/*   Updated: 2024/01/03 19:47:20 by aghounam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ char	*arvline(char *str, t_vars *size)
 
 	join = f_calloc(1, 1);
 	fd = open(str, O_RDONLY);
-	if(fd == -1)
+	if (fd == -1)
 	{
 		ft_printf("Error opening file");
 		exit(1);
 	}
-	while((line = get_next_line(fd)) != NULL)
+	while ((line = get_next_line(fd)) != NULL)
 	{
 		size->win_h++;
 		join = f_strjoin(join, line);
@@ -34,16 +34,15 @@ char	*arvline(char *str, t_vars *size)
 	return (join);
 }
 
-void	exit_map(t_vars *image)
+void	exit_map(char *s)
 {
-	ft_printf("error");
-	mlx_clear_window(image->mlx_ptr, image->win_ptr);
+	ft_printf("%s\n", s);
 	exit(1);
 }
 
 int	fstrlen(char *p)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	if (!p)
@@ -53,9 +52,9 @@ int	fstrlen(char *p)
 	return (i);
 }
 
-int test_v1(char *v)
+int	test_v1(char *v)
 {
-	int	i;
+	int i;
 
 	i = fstrlen(v);
 	if (i < 5)
@@ -81,48 +80,42 @@ int	handle_key_event(int keycode, t_vars *image)
 		mouved(image);
 	else if (keycode == 126)
 		mouvew(image);
-	mlx_clear_window(image->mlx_ptr, image->win_ptr);
 	randre(image->map, image);
-	return 0;
+	return (0);
 }
 
 void	window(t_vars *image)
 {
 	image->mlx_ptr = mlx_init();
-	if(!image->mlx_ptr)
+	if (!image->mlx_ptr)
 		exit(1);
-	image->win_ptr = mlx_new_window(image->mlx_ptr, image->width * 48, (image->height) * 48, "My Image");
-	image->img = mlx_new_image(image->mlx_ptr, image->width * 48, image->height * 48);
+	image->win_ptr = mlx_new_window(image->mlx_ptr, image->width * 48, image->height * 48, "My Image");
+	intilize_xpm(image);
 	mlx_hook(image->win_ptr, 17, 0, &closegame, image);
 	mlx_hook(image->win_ptr, 2, 0, &handle_key_event, image);
 	randre(image->map, image);
 	mlx_loop(image->mlx_ptr);
 }
 
-// void leaks(void)
-// {
-// 	system("leaks so_long");
-// }
 int main(int argc, char **arv)
 {
-	// atexit(leaks);
-	t_vars	*image;
+	t_vars	image;
 	char	*src;
 	char	**str;
-	
-	image = malloc(sizeof(t_vars));
-	if (test_v1(arv[1]) == 0 || argc != 2 || !image)
-		exit_map(image);
-	init_var(image);
-	checkmap(arv[1], image);
+
+	if (test_v1(arv[1]) == 0 || argc != 2)
+		exit_map("error");
+	init_var(&image);
+	checkmap(arv[1], &image);
 	src = update(arv[1]);
 	str = ft_split(src, '\n');
-	if(!str)
+	if (!str)
 		exit(1);
-	image->map = str;
-	image->width = fstrlen(image->map[0]);
-	while (image->map[image->height])
-		image->height++;
-	window(image);
-	return 0;
+	image.map = str;
+	image.width = fstrlen(image.map[0]);
+	while (image.map[image.height])
+		image.height++;
+	if(image.width > 53 || image.height > 29)
+		messagelong("map not valid");
+	window(&image);
 }

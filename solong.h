@@ -6,25 +6,25 @@
 /*   By: aghounam <aghounam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 08:20:38 by aghounam          #+#    #+#             */
-/*   Updated: 2024/01/02 11:47:52 by aghounam         ###   ########.fr       */
+/*   Updated: 2024/01/03 19:43:49 by aghounam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SOLONG_H
-#define SOLONG_H
+# define SOLONG_H
 
-#include <mlx.h>
-#include "./utils/get_next_line.h"
-#include "./printf/ft_printf.h"
-#include <unistd.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <libc.h>
+# include <mlx.h>
+# include "./utils/get_next_line.h"
+# include "./printf/ft_printf.h"
+# include <unistd.h>
+# include <stdlib.h>
+# include <fcntl.h>
+# include <libc.h>
 
 typedef struct s_vars
 {
 	int		win_w;
-	int 	win_h;
+	int		win_h;
 	int		x_p;
 	int		y_p;
 	char	**map;
@@ -32,7 +32,6 @@ typedef struct s_vars
 	void	*mlx_ptr;
 	void	*win_ptr;
 	void	*img;
-	int		i;
 	int		c;
 	int		count;
 	int		width;
@@ -41,9 +40,13 @@ typedef struct s_vars
 	char	*player;
 	char	*open;
 	char	*close;
+	char	*coin;
+	char	*wall;
+	char	*space;
 	int		posx;
 	int		posy;
-} t_vars;
+	int		e;
+}	t_vars;
 
 void	checkmap(char *str, t_vars *size);
 void	mouvea(t_vars *vars);
@@ -55,19 +58,21 @@ void	checkpos(char **rest, t_vars *size);
 char	*arvline(char *str, t_vars *size);
 int		closegame(t_vars *image);
 void	free_all(char **str);
-char	*ft_exit(t_vars *image);
-void randre(char **str, t_vars *image);
+void	randre(char **str, t_vars *image);
 void	put_string(t_vars *image);
 char	*join(char *s1, char *s2);
-void	exit_map(t_vars *image);
 char	*update(char *str);
-void	putimage(char *str, t_vars *image, int i, int j);
-void 	position(char **rest, t_vars *size);
+int		ifcaneat(char **str, int x, int y, t_vars *size);
+void	position(char **rest, t_vars *size);
 void	window(t_vars *image);
 int		handle_key_event(int keycode, t_vars *image);
-// char	*ft_substr(const char *s, int start, int len);
-// char	*ft_strtrim(char const *s1, char const *set);
-// char	*ft_strdup(const char *s1);
-// char	**ft_split(char const *s, char c);
-// char	*ft_itoa(int n);
+void	messagelong(char *s);
+void	exit_map(char *s);
+void	intilize_xpm(t_vars *image);
+void	flood(char **rest, int x, int y, t_vars *size);
+int		checkc(char **src);
+void	exit_game(t_vars *image);
+int		test_v1(char *v);
+int		fstrlen(char *p);
+
 #endif

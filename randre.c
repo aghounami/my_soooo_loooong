@@ -6,24 +6,16 @@
 /*   By: aghounam <aghounam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 08:20:45 by aghounam          #+#    #+#             */
-/*   Updated: 2024/01/02 12:13:01 by aghounam         ###   ########.fr       */
+/*   Updated: 2024/01/03 19:30:10 by aghounam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "solong.h"
 
-// char *ft_exit(t_vars *image)
-// {
-// 	if (image->c == 0)
-// 		return (image->open);
-// 	else
-// 		return (image->close);
-// }
-
-void put_string(t_vars *image)
+void	put_string(t_vars *image)
 {
-	char *str;
-	char *j;
+	char	*str;
+	char	*j;
 
 	str = ft_itoa(image->count);
 	if (!str)
@@ -35,48 +27,73 @@ void put_string(t_vars *image)
 	if (!j)
 	{
 		free(str);
-		exit_map(image);
+		exit_map("error in putmoves");
 	}
-	mlx_string_put(image->mlx_ptr, image->win_ptr, 5, (image->win_h - 1) * 48 + 48 / 8, 0xFFFFFF, j);
+	mlx_string_put(image->mlx_ptr, image->win_ptr, 24,
+		(image->win_h - 1) * 50, 0xFFFFFF, j);
 	free(str);
 	free(j);
 }
-void randre(char **str, t_vars *image)
+
+char	*get_image(char **str, t_vars *image, int i, int j)
 {
-	int i;
-	int j;
+	if (str[i][j] == '0')
+		return (image->space);
+	if (str[i][j] == 'P')
+		return (image->player);
+	if (str[i][j] == 'C')
+		return (image->coin);
+	if (str[i][j] == '1')
+		return (image->wall);
+	if (str[i][j] == 'E')
+	{
+		if(image->c == 0)
+			return (image->open);
+		else
+			return (image->close);
+	}
+	return NULL;
+}
+void	randre(char **str, t_vars *image)
+{
+	int		i;
+	int		j;
+	char	*rendred;
 
 	i = 0;
-	// char *exit = ft_exit(image);
+	mlx_clear_window(image->mlx_ptr, image->win_ptr);
 	while (str[i])
 	{
 		j = 0;
 		while (str[i][j])
 		{
-			if (str[i][j] == 'P')
-				putimage(image->player, image, i, j);
-			if (str[i][j] == 'C')
-				putimage("./imag/makla.xpm", image, i, j);
-			if (str[i][j] == '1')
-				putimage("./imag/jidar.xpm", image, i, j);
-			if (str[i][j] == 'E')
-				putimage(image->close, image, i, j);
+			rendred = get_image(str, image, i, j);
+			mlx_put_image_to_window(image->mlx_ptr, image->win_ptr, rendred, j * 48, i * 48);
 			j++;
 		}
 		i++;
 	}
+	put_string(image);
 }
 
-void putimage(char *str, t_vars *image, int i, int j)
+void	intilize_xpm(t_vars *image)
 {
-	image->img = mlx_xpm_file_to_image(image->mlx_ptr, str, &image->height, &image->width);
-	if(!image->img)
+	image->close = mlx_xpm_file_to_image(image->mlx_ptr, "./imag/close.xpm",
+			&image->height, &image->width);
+	image->open = mlx_xpm_file_to_image(image->mlx_ptr, "./imag/open.xpm",
+			&image->height, &image->width);
+	image->wall = mlx_xpm_file_to_image(image->mlx_ptr, "./imag/wall.xpm",
+			&image->height, &image->width);
+	image->coin = mlx_xpm_file_to_image(image->mlx_ptr, "./imag/coin.xpm",
+			&image->height, &image->width);
+	image->player = mlx_xpm_file_to_image(image->mlx_ptr, "./imag/player.xpm",
+			&image->height, &image->width);
+	image->space = mlx_xpm_file_to_image(image->mlx_ptr, "./imag/space.xpm",
+			&image->height, &image->width);
+	if (!image->close || !image->open || !image->wall
+		|| !image->coin || !image->player)
 	{
-		ft_printf("check image");
-		mlx_clear_window(image->mlx_ptr, image->win_ptr);
-		mlx_destroy_window(image->mlx_ptr, image->win_ptr);
-		exit(1);
+		ft_printf("check xpmfile");
+		exit_game(image);
 	}
-	mlx_put_image_to_window(image->mlx_ptr, image->win_ptr, image->img, j * 48, i * 48);
-	put_string(image);
 }
