@@ -6,7 +6,7 @@
 /*   By: aghounam <aghounam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 08:20:45 by aghounam          #+#    #+#             */
-/*   Updated: 2024/01/03 19:30:10 by aghounam         ###   ########.fr       */
+/*   Updated: 2024/01/05 20:06:33 by aghounam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ void	put_string(t_vars *image)
 	if (!j)
 	{
 		free(str);
-		exit_map("error in putmoves");
+		ft_printf("error in moves");
+		exit_game(image);
 	}
 	mlx_string_put(image->mlx_ptr, image->win_ptr, 24,
 		(image->win_h - 1) * 50, 0xFFFFFF, j);
@@ -47,13 +48,14 @@ char	*get_image(char **str, t_vars *image, int i, int j)
 		return (image->wall);
 	if (str[i][j] == 'E')
 	{
-		if(image->c == 0)
+		if (image->c == 0)
 			return (image->open);
 		else
 			return (image->close);
 	}
-	return NULL;
+	return (NULL);
 }
+
 void	randre(char **str, t_vars *image)
 {
 	int		i;
@@ -68,7 +70,8 @@ void	randre(char **str, t_vars *image)
 		while (str[i][j])
 		{
 			rendred = get_image(str, image, i, j);
-			mlx_put_image_to_window(image->mlx_ptr, image->win_ptr, rendred, j * 48, i * 48);
+			mlx_put_image_to_window(image->mlx_ptr, image->win_ptr,
+				rendred, j * 48, i * 48);
 			j++;
 		}
 		i++;
@@ -90,10 +93,32 @@ void	intilize_xpm(t_vars *image)
 			&image->height, &image->width);
 	image->space = mlx_xpm_file_to_image(image->mlx_ptr, "./imag/space.xpm",
 			&image->height, &image->width);
-	if (!image->close || !image->open || !image->wall
+	if (!image->close || !image->open || !image->wall || !image->space
 		|| !image->coin || !image->player)
 	{
 		ft_printf("check xpmfile");
 		exit_game(image);
 	}
+}
+
+int	handle_key_event(int keycode, t_vars *image)
+{
+	position(image->map, image);
+	if (keycode == 53)
+	{
+		ft_printf("The window closes with 'Esc'.");
+		mlx_destroy_window(image->mlx_ptr, image->win_ptr);
+		mlx_clear_window(image->mlx_ptr, image->win_ptr);
+		exit(0);
+	}
+	else if (keycode == 123 || keycode == 0)
+		mouvea(image);
+	else if (keycode == 125 || keycode == 1)
+		mouves(image);
+	else if (keycode == 124 || keycode == 2)
+		mouved(image);
+	else if (keycode == 126 || keycode == 13)
+		mouvew(image);
+	randre(image->map, image);
+	return (0);
 }

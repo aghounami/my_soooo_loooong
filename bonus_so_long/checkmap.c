@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aghounam <aghounam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/29 08:21:31 by aghounam          #+#    #+#             */
-/*   Updated: 2024/01/03 18:11:52 by aghounam         ###   ########.fr       */
+/*   Created: 2024/01/04 17:40:51 by aghounam          #+#    #+#             */
+/*   Updated: 2024/01/05 15:35:11 by aghounam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	checkc(char **src)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	j = 0;
@@ -24,7 +24,7 @@ int	checkc(char **src)
 		while (src[i][j])
 		{
 			if (src[i][j] != '1' && src[i][j] != 'P'
-				&& src[i][j] != 'E' && src[i][j] != '0')
+				&& src[i][j] != 'E' && src[i][j] != '0' && src[i][j] != 'N')
 				return (0);
 			j++;
 		}
@@ -85,13 +85,15 @@ void	checkpos(char **rest, t_vars *size)
 	free_all(rest);
 }
 
-int	validmap(char *map, t_vars *size)
+void	validmap(char *map, t_vars *size)
 {
 	int	p;
 	int	e;
+	int	n;
 
 	p = 0;
 	e = 0;
+	n = 0;
 	while (*map)
 	{
 		if (*map == 'C')
@@ -102,12 +104,12 @@ int	validmap(char *map, t_vars *size)
 			p++;
 		else if (*map == 'E')
 			e++;
+		else if (*map == 'N')
+			n++;
 		map++;
 	}
-	if (size->c <= 0 || p != 1 || e != 1)
-		return (0);
-	else
-		return (1);
+	if (size->c <= 0 || p != 1 || e != 1 || n != 1)
+		exit_map("map not valid", size);
 }
 
 int	maploop(char *p, t_vars *size)
@@ -136,26 +138,4 @@ int	maploop(char *p, t_vars *size)
 	}
 	checkpos(res, &data);
 	return (1);
-}
-
-void	checkmap(char *str, t_vars *size)
-{
-	char	*check;
-	char	*res;
-
-	check = arvline(str, size);
-	size->total_lenght = f_strlen(check);
-	size->win_w = ft_len(check);
-	res = ft_strtrim(check, "10EPC\n");
-	if ((size->win_w * size->win_h - 1) != size->total_lenght
-		|| (res[0] != '\0') || !validmap(check, size) || !maploop(check, size))
-	{
-		ft_printf("check map\n");
-		free(res);
-		free(check);
-		mlx_clear_window(size->mlx_ptr, size->win_ptr);
-		exit(1);
-	}
-	free(check);
-	free(res);
 }

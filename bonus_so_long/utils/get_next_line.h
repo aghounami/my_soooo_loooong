@@ -6,7 +6,7 @@
 /*   By: aghounam <aghounam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 10:39:36 by aghounam          #+#    #+#             */
-/*   Updated: 2024/01/01 17:50:06 by aghounam         ###   ########.fr       */
+/*   Updated: 2024/01/04 08:51:47 by aghounam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,5 @@ char	**ft_split(char const *s, char c);
 char	*ft_strdup(const char *s1);
 char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_substr(const char *s, int start, int len);
-
 
 #endif

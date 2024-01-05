@@ -6,7 +6,7 @@
 /*   By: aghounam <aghounam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 08:21:14 by aghounam          #+#    #+#             */
-/*   Updated: 2024/01/03 19:47:20 by aghounam         ###   ########.fr       */
+/*   Updated: 2024/01/05 15:51:42 by aghounam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,27 @@
 
 char	*arvline(char *str, t_vars *size)
 {
-	int		fd;
 	char	*line;
 	char	*join;
 
 	join = f_calloc(1, 1);
-	fd = open(str, O_RDONLY);
-	if (fd == -1)
-	{
-		ft_printf("Error opening file");
-		exit(1);
-	}
-	while ((line = get_next_line(fd)) != NULL)
+	size->fd = open(str, O_RDONLY);
+	if (size->fd == -1)
+		exit_map("error opning fd", size);
+	line = get_next_line(size->fd);
+	while (line != NULL)
 	{
 		size->win_h++;
 		join = f_strjoin(join, line);
 		free(line);
+		line = get_next_line(size->fd);
 	}
 	return (join);
 }
 
-void	exit_map(char *s)
-{
-	ft_printf("%s\n", s);
-	exit(1);
-}
-
 int	fstrlen(char *p)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!p)
@@ -52,70 +44,63 @@ int	fstrlen(char *p)
 	return (i);
 }
 
-int	test_v1(char *v)
+void	checkmap(char *str, t_vars *size)
 {
-	int i;
+	char	*check;
+	char	*res;
 
-	i = fstrlen(v);
-	if (i < 5)
-		return (0);
-	if (v[i - 1] != 'r' || v[i - 2] != 'e' || v[i - 3] != 'b' || v[i - 4] != '.')
-		return (0);
-	return (1);
-}
-
-int	handle_key_event(int keycode, t_vars *image)
-{
-	position(image->map, image);
-	if (keycode == 53)
+	check = arvline(str, size);
+	size->total_lenght = f_strlen(check);
+	size->win_w = ft_len(check);
+	validmap(check, size);
+	res = ft_strtrim(check, "10EPCN\n");
+	if (!res)
+		exit_map("error in allocation", size);
+	if ((size->win_w * size->win_h - 1) != size->total_lenght
+		|| (res[0] != '\0') || !maploop(check, size))
 	{
-		mlx_destroy_window(image->mlx_ptr, image->win_ptr);
-		exit(0);
+		free(res);
+		free(check);
+		exit_map("map not valid", size);
 	}
-	else if (keycode == 123)
-		mouvea(image);
-	else if (keycode == 125)
-		mouves(image);
-	else if (keycode == 124)
-		mouved(image);
-	else if (keycode == 126)
-		mouvew(image);
-	randre(image->map, image);
-	return (0);
+	free(check);
+	free(res);
 }
 
 void	window(t_vars *image)
 {
 	image->mlx_ptr = mlx_init();
 	if (!image->mlx_ptr)
-		exit(1);
-	image->win_ptr = mlx_new_window(image->mlx_ptr, image->width * 48, image->height * 48, "My Image");
+		exit_map("error in init\n", image);
+	image->win_ptr = mlx_new_window(image->mlx_ptr,
+			image->width * 48, image->height * 48, "My Image");
 	intilize_xpm(image);
+	randre(image->map, image);
 	mlx_hook(image->win_ptr, 17, 0, &closegame, image);
 	mlx_hook(image->win_ptr, 2, 0, &handle_key_event, image);
-	randre(image->map, image);
+	mlx_loop_hook(image->mlx_ptr, &mouven, image);
 	mlx_loop(image->mlx_ptr);
 }
 
-int main(int argc, char **arv)
+int	main(int argc, char **arv)
 {
 	t_vars	image;
 	char	*src;
 	char	**str;
 
 	if (test_v1(arv[1]) == 0 || argc != 2)
-		exit_map("error");
+		messagelong("very large map");
 	init_var(&image);
 	checkmap(arv[1], &image);
 	src = update(arv[1]);
 	str = ft_split(src, '\n');
 	if (!str)
-		exit(1);
+		exit_map("error in split\n", &image);
 	image.map = str;
 	image.width = fstrlen(image.map[0]);
 	while (image.map[image.height])
 		image.height++;
-	if(image.width > 53 || image.height > 29)
-		messagelong("map not valid");
+	if (image.width > 53 || image.height > 29)
+		exit_map("very large map", &image);
 	window(&image);
 }

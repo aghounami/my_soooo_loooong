@@ -1,39 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   ft_hexa_adress.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aghounam <aghounam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/02 10:49:02 by aghounam          #+#    #+#             */
-/*   Updated: 2024/01/01 17:49:46 by aghounam         ###   ########.fr       */
+/*   Created: 2023/11/08 15:15:50 by aghounam          #+#    #+#             */
+/*   Updated: 2023/11/25 16:25:27 by aghounam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "ft_printf.h"
 
-char	*ft_substr(const char *s, int start, int len)
+void	ft_hexa_adress(unsigned long src, int *l)
 {
-	int	i;
-	char	*str;
-	char	*sub;
+	int		i;
+	char	*hexa;
+	char	res[255];
 
-	if (!s)
-		return (NULL); 
-	str = (char *)s;
-	if (start >= f_strlen(s))
-		return (ft_strdup(""));
-	if (len > (f_strlen(s) - start))
-		len = f_strlen(s) - start;
-	sub = (char *)malloc(len + 1);
-	if (sub == NULL)
-		return (NULL);
+	hexa = "0123456789abcdef";
 	i = 0;
-	while (i < len)
+	ft_putstr("0x", l);
+	while (src >= 16)
 	{
-		sub[i] = str[start + i];
+		res[i] = hexa[src % 16];
+		src /= 16;
 		i++;
 	}
-	sub[i] = '\0';
-	return (sub);
+	res[i] = hexa[src];
+	while (i >= 0)
+	{
+		ft_putchar(res[i], l);
+		i--;
+	}
 }
