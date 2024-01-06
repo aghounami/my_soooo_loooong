@@ -6,7 +6,7 @@
 /*   By: aghounam <aghounam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 08:20:45 by aghounam          #+#    #+#             */
-/*   Updated: 2024/01/05 20:06:16 by aghounam         ###   ########.fr       */
+/*   Updated: 2024/01/06 18:21:41 by aghounam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,8 @@ int	handle_key_event(int keycode, t_vars *image)
 	if (keycode == 53)
 	{
 		ft_printf("The window closes with 'Esc'.");
-		mlx_destroy_window(image->mlx_ptr, image->win_ptr);
 		mlx_clear_window(image->mlx_ptr, image->win_ptr);
+		mlx_destroy_window(image->mlx_ptr, image->win_ptr);
 		exit(0);
 	}
 	else if (keycode == 123 || keycode == 0)

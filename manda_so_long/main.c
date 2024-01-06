@@ -6,7 +6,7 @@
 /*   By: aghounam <aghounam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/29 08:21:14 by aghounam          #+#    #+#             */
-/*   Updated: 2024/01/05 19:59:25 by aghounam         ###   ########.fr       */
+/*   Updated: 2024/01/06 13:36:34 by aghounam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ int	main(int argc, char **arv)
 	char	*src;
 	char	**str;
 
+	system("leaks _manda");
 	if (test_v1(arv[1]) == 0 || argc != 2)
 		messagelong("check argc");
 	init_var(&image);
